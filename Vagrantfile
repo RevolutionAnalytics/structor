@@ -22,7 +22,7 @@ $profile_path = ["current.profile",
                  "profiles/default.profile"]
 
 ###############################################################################
-# Loads a profile, which is a JSON file describing a specific configuation.
+# Loads a profile, which is a JSON file describing a specific configuration.
 #
 # The user should create a symlink from current.profile to the desired
 # profile.
@@ -73,6 +73,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           "profile" => profile
         }
       end
+      node_config.vm.provision :shell, path: "modules/rhadoop/rhadoop.sh"
     end
   end
 
