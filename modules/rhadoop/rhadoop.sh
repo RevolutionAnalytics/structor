@@ -34,17 +34,19 @@ install.packages("rJava", lib="/usr/lib64/RRO-8.0/R-3.1.1/lib64/R/library")
 EOF
 
 #download rmr  quickcheck ravro rhdfs
-sudo rm -rf rmr2* quickcheck* ravro* rhdfs*
+sudo rm -rf rmr2* quickcheck* ravro* rhdfs* plyrmr*
 wget  --no-verbose --no-check-certificate https://github.com/RevolutionAnalytics/rhdfs/archive/master.tar.gz -O - | tar zx
 wget  --no-verbose --no-check-certificate https://github.com/RevolutionAnalytics/rmr2/archive/master.tar.gz -O - | tar zx
 wget  --no-verbose --no-check-certificate https://github.com/RevolutionAnalytics/quickcheck/archive/master.tar.gz -O - | tar zx
 wget  --no-verbose --no-check-certificate https://github.com/RevolutionAnalytics/ravro/archive/master.tar.gz -O - | tar zx
+wget  --no-verbose --no-check-certificate https://github.com/RevolutionAnalytics/plyrmr/archive/master.tar.gz -O - | tar zx
 mv rmr2* rmr2
 mv quickcheck* quickcheck
 mv ravro* ravro
 mv rhdfs* rhdfs
+mv plyrmr* plyrmr
 
-#Install dependencies for all pakgs
+#Install dependencies for all pkgs
 sudo R --no-save << EOF
 lib='/usr/lib64/RRO-8.0/R-3.1.1/lib64/R/library'
 install.packages("devtools", lib = lib)
@@ -60,13 +62,15 @@ install_deps_libpath =
                pkg, 
                dependencies = deps), 
              new = lib))}
-install_deps_libpath(c("ravro/pkg/ravro", "rmr2/pkg", "quickcheck/pkg", "rhdfs/pkg"))
+install_deps_libpath(c("ravro/pkg/ravro", "rmr2/pkg", "quickcheck/pkg", "rhdfs/pkg", "plyrmr/pkg"))
+install_github("RevolutionAnalytics/memoise") #patched fork
 EOF
 
 
 sudo R CMD INSTALL  rmr2/pkg/
 sudo R CMD INSTALL quickcheck/pkg/
 sudo R CMD INSTALL ravro/pkg/ravro
+sudo R CMD INSTALL plyrmr/pkg
 
 export HADOOP
 sudo -E  R CMD INSTALL rhdfs/pkg
@@ -80,8 +84,3 @@ export HADOOP_STREAMING=`find / -name *streaming*jar 2>/dev/null | head -1`
 
 EOF
 EOF1
-
-
-
-
-
