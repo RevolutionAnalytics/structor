@@ -75,8 +75,8 @@ sudo -E  R CMD INSTALL rhdfs/pkg
 sudo su << EOF1
 cat >> /etc/profile << EOF
 
-export HADOOP_CMD=/usr/bin/hadoop
-export HADOOP_STREAMING=/usr/lib/hadoop-mapreduce/hadoop-streaming.jar
+export HADOOP_CMD=`which hadoop`
+export HADOOP_STREAMING=`find / -name *streaming*jar 2>/dev/null | head -1`
 
 EOF
 EOF1
