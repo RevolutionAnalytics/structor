@@ -51,6 +51,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vm.vmx["memsize"] = profile[:vm_mem]
   end
 
+  config.vm.provider :aws do |aws, override|
+    override.vm.box = "dummy"
+    aws.access_key_id = ENV["AWS_ACCESS_KEY_ID"]
+    aws.secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"] 
+    aws.keypair_name = ENV["AWS_KEYPAIR_NAME"]
+    aws.security_groups = [ENV["AWS_SECURITY_GROUP"]]
+    aws.instance_type= "m3.large"
+    aws.ami = "ami-7747d01e"
+    override.ssh.username = "ubuntu"
+    override.ssh.private_key_path = ENV["AWS_PRIVATE_KEY_PATH"]
+  end
+
   profile[:nodes].each do |node|
     config.vm.define node[:hostname] do |node_config|
       node_config.vm.hostname = node[:hostname] + "." + profile[:domain]
