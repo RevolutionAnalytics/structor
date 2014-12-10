@@ -51,6 +51,9 @@ sudo R --no-save << EOF
 lib='/usr/lib64/RRO-8.0/R-3.1.1/lib64/R/library'
 install.packages("devtools", lib = lib)
 library(devtools)
+with_libpaths(install_github("hadley/lazyeval"), new = lib)
+with_libpaths(install_github("RevolutionAnalytics/memoise"), new = lib) #patched fork
+install.packages("dplyr", repos = "http://cran.r-project.org", lib = lib)
 install_deps_libpath = 
   function(pkgs) {
     deps = c("Imports", "Depends", "Suggests")
@@ -63,7 +66,6 @@ install_deps_libpath =
                dependencies = deps), 
              new = lib))}
 install_deps_libpath(c("ravro/pkg/ravro", "rmr2/pkg", "quickcheck/pkg", "rhdfs/pkg", "plyrmr/pkg"))
-install_github("RevolutionAnalytics/memoise") #patched fork
 EOF
 
 
