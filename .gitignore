@@ -2,3 +2,5 @@
 current.profile
 generated/
 *~
+
+.Rhistory
