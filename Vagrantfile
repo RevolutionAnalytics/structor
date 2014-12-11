@@ -59,6 +59,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.security_groups = [ENV["AWS_SECURITY_GROUP"]]
     aws.instance_type= "m3.large"
     aws.ami = "ami-7747d01e"
+    aws.tags = {
+      'Name' => 'Antonio_Piccolboni_RHadoop',
+      'Use' => 'Test',
+      'Department' => 'Engineering'
+    }
     override.ssh.username = "ubuntu"
     override.ssh.private_key_path = ENV["AWS_PRIVATE_KEY_PATH"]
   end
