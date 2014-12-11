@@ -33,6 +33,18 @@ sudo R --no-save << EOF
 install.packages("rJava", lib="/usr/lib64/RRO-8.0/R-3.1.1/lib64/R/library")
 EOF
 
+#set the environment variables
+sudo su << EOF1
+cat >> /etc/profile << EOF
+
+export HADOOP_CMD=`which hadoop`
+export HADOOP_STREAMING=`find / -name *streaming*jar 2>/dev/null | head -1`
+
+EOF
+EOF1
+
+. /etc/profile
+
 #download rmr  quickcheck ravro rhdfs
 sudo rm -rf rmr2* quickcheck* ravro* rhdfs* plyrmr*
 wget  --no-verbose --no-check-certificate https://github.com/RevolutionAnalytics/rhdfs/archive/master.tar.gz -O - | tar zx
@@ -77,12 +89,3 @@ sudo R CMD INSTALL plyrmr/pkg
 export HADOOP
 sudo -E  R CMD INSTALL rhdfs/pkg
 
-#set the environment variables
-sudo su << EOF1
-cat >> /etc/profile << EOF
-
-export HADOOP_CMD=`which hadoop`
-export HADOOP_STREAMING=`find / -name *streaming*jar 2>/dev/null | head -1`
-
-EOF
-EOF1
