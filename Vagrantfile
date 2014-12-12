@@ -58,14 +58,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.keypair_name = ENV["AWS_KEYPAIR_NAME"]
     aws.security_groups = [ENV["AWS_SECURITY_GROUP"]]
     aws.instance_type= "m3.large"
-    aws.ami = "ami-7747d01e"
+    aws.region = "us-east-1"
+    aws.ami = "ami-f646cf9e"
     aws.tags = {
       'Name' => 'Antonio_Piccolboni_RHadoop',
       'Use' => 'Test',
       'Department' => 'Engineering'
     }
-    override.ssh.username = "ubuntu"
+    override.ssh.username = "root"
     override.ssh.private_key_path = ENV["AWS_PRIVATE_KEY_PATH"]
+    override.ssh.pty = true
   end
 
   profile[:nodes].each do |node|
@@ -73,6 +75,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node_config.vm.hostname = node[:hostname] + "." + profile[:domain]
       node_config.vm.network :private_network, ip: node[:ip]
       node_config.ssh.forward_agent = true
+      node_config.vm.provision :shell, inline: "yum -y install puppet" #only for aws
+      node_config.vm.provision :shell, path: "modules/java/java.sh" #only for aws
       node_config.vm.provision "puppet" do |puppet|
         puppet.module_path = "modules"
         puppet.options = ["--libdir", "/vagrant", 
